@@ -1,0 +1,20 @@
+#include <set>
+#include <algorithm>
+
+const size_t row = 2;
+const size_t col = 5;
+
+void normalization(float (&src_array)[row][col])
+{
+	for (size_t row_Index = 0; row_Index < row; row_Index++)
+	{
+		set<float> s(&(src_array[row_Index][0]), &(src_array[row_Index][col]));
+		s.erase(0);
+		float min_val = *std::min_element(s.begin(), s.end());
+		float max_val = *std::max_element(s.begin(), s.end());
+		for (size_t col_Index = 0; col_Index < col; col_Index++)
+		{
+			src_array[row_Index][col_Index] = src_array[row_Index][col_Index] * 300 / (max_val - min_val);
+		}
+	}
+}
