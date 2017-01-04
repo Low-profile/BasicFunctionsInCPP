@@ -1,0 +1,9 @@
+#include <set>
+#include <vector>
+
+vector<int> FindAllNumerics(int* intArray, size_t size)
+{
+	set<int> s(intArray, intArray + size);
+	vector<int> v(s.begin(), s.end());
+	return v;
+}
