@@ -1,5 +1,12 @@
 #include <algorithm>
 
+// return the value and the index of the minimum number in an INT array
+/*
+[in]    intArray: array to be searched in
+[in]    size    : size of the array
+[out]   num	    : the value of the minimum number
+[out]   loc	    : the index of the minimum number
+*/
 void minNumLoc(int* intArray, size_t size, int& num, size_t& loc)
 {
 	int * iterator = min_element(intArray, intArray + size);
