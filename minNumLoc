@@ -1,0 +1,8 @@
+#include <algorithm>
+
+void minNumLoc(int* intArray, size_t size, int& num, size_t& loc)
+{
+	int * iterator = min_element(intArray, intArray + size);
+	loc = iterator - intArray;
+	num = *iterator;
+}
