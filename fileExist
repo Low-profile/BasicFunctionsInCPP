@@ -1,0 +1,5 @@
+bool is_file_exist(const char *fileName)
+{
+	ifstream infile(fileName);
+	return infile.good();
+}
