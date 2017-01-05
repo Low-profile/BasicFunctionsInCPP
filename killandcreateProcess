@@ -1,0 +1,72 @@
+#include <iostream>
+#include <windows.h>
+#include <winbase.h>
+#include <tlhelp32.h>
+#pragma comment(lib,"kernel32.lib")
+#pragma comment(lib,"advapi32.lib")
+
+
+bool pskill(DWORD id)   //根据进程ID杀进程
+{
+	HANDLE hProcess = NULL;
+	//打开目标进程
+	hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, id);
+	if (hProcess == NULL) {
+		wprintf(L"\nOpen Process fAiled:%d\n", GetLastError());
+		return false;
+	}
+	//结束目标进程
+	DWORD ret = TerminateProcess(hProcess, 0);
+	if (ret == 0) {
+		wprintf(L"%d", GetLastError());
+	}
+	return true;
+}
+
+bool killmsPaint()
+{
+	//进程列举
+	DWORD mspaintPID = 0;
+	HANDLE hSnApshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (hSnApshot != INVALID_HANDLE_VALUE) {
+		PROCESSENTRY32 te = { sizeof(te) };
+		BOOL f0k = Process32First(hSnApshot, &te);
+		for (; f0k; f0k = Process32Next(hSnApshot, &te)) {
+			if (_wcsicmp(L"mspaint.exe", te.szExeFile) == 0)
+			{
+				mspaintPID = te.th32ProcessID;
+				//wprintf(L"Pid: %d %s\n", te.th32ProcessID, te.szExeFile);
+				break;
+			}
+		}
+	}
+	CloseHandle(hSnApshot);
+	//杀进程
+	if (mspaintPID != 0)
+	{
+		return pskill(mspaintPID);
+	}
+	else
+		return false;
+}
+
+bool bootmsPaint()
+{
+	STARTUPINFO si; //一些必备参数设置
+	memset(&si, 0, sizeof(STARTUPINFO));
+	si.cb = sizeof(STARTUPINFO);
+	si.dwFlags = STARTF_USESHOWWINDOW;
+	si.wShowWindow = SW_SHOW;
+	PROCESS_INFORMATION pi; //必备参数设置结束
+
+	TCHAR lpszClientPath[MAX_PATH] = TEXT("C:\\WINDOWS\\system32\\mspaint.exe");
+	if (!CreateProcess(NULL, lpszClientPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	{
+		cout << "Create Fail!" << endl;
+		exit(1);
+	}
+	else
+	{
+		cout << "Sucess!" << endl;
+	}
+}
