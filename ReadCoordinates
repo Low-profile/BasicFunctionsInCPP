@@ -1,0 +1,26 @@
+#include <fstream>
+#include <vector>
+#include <sstream>
+#include <string>
+
+void ReadCoordinates(std::string filename,std::vector<std::vector<int>>& stroke)
+{
+	std::ifstream strokeFile(filename);
+	if(strokeFile)
+	{
+		std::string cur_string;
+		while(std::getline(strokeFile,cur_string))
+		{
+			std::stringstream cur_line;
+			std::vector<int> cur_stroke;
+			cur_line << cur_string;
+			int num = 0;
+			for(int i=0;i<4;i++)
+			{
+				cur_line >> num;
+				cur_stroke.push_back(num);
+			}
+			stroke.push_back(cur_stroke);
+		}
+	}
+}
